@@ -1,46 +1,65 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { FaSearch } from "react-icons/fa";
+import PropTypes from "prop-types";
 import { fetchMovies } from "../../redux/actions/movieActions";
 
 const MovieSearch = () => {
   const [query, setQuery] = useState("");
+  const [isTyping, setIsTyping] = useState(false);
   const dispatch = useDispatch();
 
+  // Debounced search effect
   useEffect(() => {
-    
-    const handler = setTimeout(() => {
-      if (query) {
+    const debounceTimer = setTimeout(() => {
+      if (query.trim()) {
         dispatch(fetchMovies(query));
-      }
-      else if(query===""){
-        dispatch(fetchMovies("popular"));
+      } else {
+        dispatch(fetchMovies("popular")); // Show popular movies when empty
       }
     }, 500);
 
-    return () => {
-      clearTimeout(handler);
-    };
+    return () => clearTimeout(debounceTimer);
   }, [query, dispatch]);
 
-  const handleInputChange = (e) => {
-    setQuery(e.target.value);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (query.trim()) {
+      dispatch(fetchMovies(query));
+    }
   };
 
   return (
-    <div className="flex items-center bg-slate-700 border rounded-xl pr-2 max-w-[380px] w-[100%] mr-[10%] border-white">
+    <form 
+      onSubmit={handleSubmit}
+      className="flex items-center bg-slate-700 border rounded-xl pr-2 max-w-[380px] w-full mr-[10%] border-white hover:border-slate-300 transition-colors"
+    >
       <input
         type="text"
+        aria-label="Search movies"
         placeholder="Search movies..."
-        className="py-[10px] pl-4 pr-3 rounded-md w-full bg-transparent text-white focus:outline-none"
+        className="py-[10px] pl-4 pr-3 rounded-md w-full bg-transparent text-white focus:outline-none placeholder:text-slate-300"
         value={query}
-        onChange={handleInputChange}
+        onChange={(e) => setQuery(e.target.value)}
+        onFocus={() => setIsTyping(true)}
+        onBlur={() => setIsTyping(false)}
       />
-      <button className="ml-2 p-2 rounded">
-        <FaSearch />
+      
+      <button
+        type="submit"
+        aria-label="Search"
+        className={`ml-2 p-2 rounded-full transition-colors ${
+          isTyping ? "text-white" : "text-slate-300"
+        } hover:text-white hover:bg-slate-600`}
+      >
+        <FaSearch className="w-5 h-5" />
       </button>
-    </div>
+    </form>
   );
+};
+
+MovieSearch.propTypes = {
+  initialQuery: PropTypes.string,
 };
 
 export default MovieSearch;
