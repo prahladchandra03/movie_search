@@ -1,0 +1,21 @@
+.customScrollbar {
+  overflow-y: auto;
+}
+
+.customScrollbar::-webkit-scrollbar {
+  width: 10px;
+}
+
+.customScrollbar::-webkit-scrollbar-track {
+  background: #fff; /* Pure white */
+}
+
+.customScrollbar::-webkit-scrollbar-thumb {
+  background-color: #4f46e5; /* Indigo-600 */
+  border-radius: 10px;
+  border: 2px solid #fff;
+}
+
+.customScrollbar::-webkit-scrollbar-thumb:hover {
+  background: #3730a3; /* Indigo-800 */
+}

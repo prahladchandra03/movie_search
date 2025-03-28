@@ -1,0 +1,9 @@
+.skeleton {
+  background-color: #dbeafe;
+  background-image: linear-gradient(
+    90deg,
+    #eff6ff 25%,  /* blue-50 */
+    #dbeafe 50%,   /* blue-100 */
+    #eff6ff 75%    /* blue-50 */
+  );
+}
